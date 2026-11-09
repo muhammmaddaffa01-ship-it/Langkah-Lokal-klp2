@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Langkah Lokal | Wisata Edukasi Lokal Akhir Pekan</title>
+  <meta name="description" content="Langkah Lokal menawarkan tiga paket wisata edukasi lokal akhir pekan: Langkah Kota, Langkah Rimba, dan Langkah Rasa.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- CEO: Header -->
+<header id="header-section" data-role="CEO">
+  <a class="brand" href="#hero-section">LANGKAH LOKAL</a>
+  <nav aria-label="Navigasi utama">
+    <ul>
+      <li><a href="#hero-section">Beranda</a></li>
+      <li><a href="#catalog-section">Katalog</a></li>
+      <li><a href="#calc-section">Kalkulator</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- PM 1: Hero Section -->
+<section id="hero-section" data-role="PM">
+  <p>Wisata edukasi lokal akhir pekan</p>
+  <h1>Akhir pekan jalan-jalan, pulang bawa cerita baru.</h1>
+  <p>
+    Kenali sejarah kota, jelajahi alam, dan cicipi kuliner lokal
+    lewat tur akhir pekan bersama pemandu Langkah Lokal.
+  </p>
+
+  <ul>
+    <li>Tiga pilihan tur sesuai minatmu.</li>
+    <li>Belajar langsung di lokasi bersama pemandu.</li>
+    <li>Biaya perjalanan bisa dihitung sebelum berangkat.</li>
+  </ul>
+
+  <a class="button" href="#catalog-section">Lihat Paket Wisata</a>
+</section>
+
+<!-- PM 2: Katalog Paket Wisata -->
+<section id="catalog-section" data-role="PM">
+  <h2>Pilih Paket Wisatamu</h2>
+  <p class="promo">
+    Gunakan kode <strong>LANGKAH10</strong> untuk mendapat diskon 10%
+    di semua paket tanpa minimal peserta.
+  </p>
+
+  <div class="catalog">
+    <article>
+      <h3>Langkah Kota</h3>
+      <p>Jelajah Kota Sehari</p>
+      <p>
+        Susuri Kota Tua Jakarta dan pelajari sejarahnya sambil mengunjungi
+        museum. Paket sudah termasuk pemandu, tiket museum, dan air mineral.
+      </p>
+      <strong>Rp125.000 per peserta</strong>
+    </article>
+
+    <article>
+      <h3>Langkah Rimba</h3>
+      <p>Wisata Alam Terbuka</p>
+      <p>
+        Ikuti trekking ringan sambil mengenal tumbuhan dan peran hutan
+        dalam menjaga lingkungan. Paket sudah termasuk pemandu, tiket
+        masuk kawasan, dan makan siang.
+      </p>
+      <strong>Rp175.000 per peserta</strong>
+    </article>
+
+    <article>
+      <h3>Langkah Rasa</h3>
+      <p>Wisata Sejarah dan Kuliner</p>
+      <p>
+        Jelajahi Glodok bersama pemandu, dengarkan cerita sejarah
+        kawasannya, dan cicipi tiga jajanan khas yang sudah termasuk
+        dalam paket.
+      </p>
+      <strong>Rp150.000 per peserta</strong>
+    </article>
+  </div>
+</section>
+
+<!-- SE 1: Kalkulator (ID dipakai script.js) -->
+<section id="calc-section" data-role="SE">
+  <h2>Hitung Biaya Perjalanan</h2>
+  <p>Pilih paket, isi jumlah peserta, lalu masukkan kode promo kalau punya.</p>
+
+  <div class="calc-box">
+    <label for="paket">Paket wisata</label>
+    <select id="paket">
+      <option value="kota">Langkah Kota - Rp125.000</option>
+      <option value="rimba">Langkah Rimba - Rp175.000</option>
+      <option value="rasa">Langkah Rasa - Rp150.000</option>
+    </select>
+
+    <label for="jumlah">Jumlah peserta</label>
+    <input type="number" id="jumlah" min="1" value="1">
+
+    <label for="kode-promo">Kode promo</label>
+    <input type="text" id="kode-promo" placeholder="Contoh: LANGKAH10" autocomplete="off">
+
+    <button type="button" id="btn-hitung">Hitung Biaya</button>
+
+    <div id="hasil" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- CEO: Footer -->
+<footer id="footer-section" data-role="CEO">
+  <div>
+    <p>&copy; 2026 Langkah Lokal. Wisata Edukasi Lokal Akhir Pekan.</p>
+    <p>Kelas WebDev D &middot; Kelompok 2</p>
+  </div>
+  <div>
+    <p>Anggota tim: [isi nama anggota kelompok]</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

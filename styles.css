@@ -1,0 +1,795 @@
+/* =========================================================
+   LANGKAH LOKAL - styles.css
+   Peran: UI/UX Designer A (identitas & layout) + B (komponen)
+   Kelompok 2 - WebDev D | Wisata Edukasi Lokal Akhir Pekan
+
+   Dicocokkan dengan:
+   - index.html : #hero-section, #catalog-section, .catalog > article, .promo, .button
+   - script.js  : #paket #jumlah #kode-promo #btn-hitung #hasil
+                  (isi hasil: h3, p, .promo-info, .total, .error)
+
+   Konsep desain: "langkah" = jejak kaki di jalur wisata.
+   Motif titik-titik (jejak) dipakai berulang: di judul hero,
+   di bawah judul section, dan di ilustrasi hero.
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Figtree:wght@400;500;600;700&display=swap');
+
+
+/* =========================================================
+   UI/UX DESIGNER A - BRAND COLOR
+   ========================================================= */
+:root {
+  --hutan:      #0f5b4f;   /* primer: hijau rimba */
+  --hutan-tua:  #0a3f37;   /* hover, footer, hero gelap */
+  --hutan-muda: #e3f0ea;   /* latar lembut */
+  --langit:     #1d7a62;   /* sekunder: hijau daun */
+  --kunyit:     #f4b63f;   /* aksen: CTA, harga, promo */
+  --kunyit-tua: #dc9d24;
+  --tinta:      #14262a;   /* teks utama */
+  --abu:        #51625f;   /* teks sekunder (kontras >= 4.5:1) */
+  --kertas:     #f5f9f7;   /* background halaman */
+  --putih:      #ffffff;
+  --garis:      #d6e4de;
+  --error:      #9b2c2c;
+
+  --font-judul: 'Bricolage Grotesque', 'Segoe UI', Arial, sans-serif;
+  --font-isi:   'Figtree', 'Segoe UI', Arial, sans-serif;
+
+  /* standar radius & bayangan (dipakai semua komponen) */
+  --radius-kartu:  20px;
+  --radius-input:  12px;
+  --radius-tombol: 999px;
+  --bayangan:       0 10px 30px rgba(15, 91, 79, 0.12);
+  --bayangan-hover: 0 18px 44px rgba(15, 91, 79, 0.22);
+
+  /* ruang tepi halaman: konten max 1120px, rata tengah */
+  --gutter: max(1.25rem, calc((100% - 1120px) / 2));
+
+  /* motif jejak langkah (deretan titik) */
+  --jejak: radial-gradient(circle, var(--kunyit) 3.2px, transparent 3.6px);
+}
+
+
+/* =========================================================
+   UI/UX DESIGNER A - TYPOGRAPHY
+   Judul : Bricolage Grotesque (tegas, sedikit "editorial")
+   Isi   : Figtree (bersih, mudah dibaca di layar kecil)
+   ========================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+
+body {
+  margin: 0;
+  font-family: var(--font-isi);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--tinta);
+  background: var(--kertas);
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-judul);
+  line-height: 1.1;
+  margin: 0 0 0.6em;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+h1 { font-size: clamp(2.4rem, 6vw, 4.4rem); font-weight: 800; }
+h2 { font-size: clamp(1.9rem, 3.8vw, 2.75rem); font-weight: 800; }
+h3 { font-size: 1.35rem; font-weight: 700; }
+p  { margin: 0 0 1em; max-width: 62ch; }
+a  { color: inherit; }
+img { max-width: 100%; height: auto; }
+
+/* jarak antarbagian */
+#hero-section, #catalog-section, #calc-section {
+  padding-inline: var(--gutter);
+}
+#catalog-section, #calc-section { padding-block: 5.5rem; }
+
+/* judul section: rata tengah + jejak langkah */
+#catalog-section > h2,
+#calc-section > h2 {
+  text-align: center;
+  margin-inline: auto;
+}
+#catalog-section > h2::after,
+#calc-section > h2::after {
+  content: "";
+  display: block;
+  width: 72px;
+  height: 8px;
+  margin: 0.9rem auto 0;
+  background: var(--jejak) 0 0 / 18px 8px repeat-x;
+}
+
+
+/* =========================================================
+   UI/UX DESIGNER A - HEADER
+   Dibuat fleksibel: berlaku untuk <header> langsung berisi
+   brand + nav, atau memakai pembungkus div/.container.
+   ========================================================= */
+#header-section {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  min-height: 72px;
+  padding-inline: var(--gutter);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--garis);
+  box-shadow: 0 2px 14px rgba(15, 91, 79, 0.06);
+}
+
+#header-section > div,
+#header-section .container,
+#header-section .header-inner {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+/* nama merek */
+#header-section .brand,
+#header-section .logo,
+#header-section h1,
+#header-section h2,
+#header-section > a:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  font-family: var(--font-judul);
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--hutan);
+  text-decoration: none;
+}
+/* tanda merek: titik jejak berwarna kunyit */
+#header-section .brand::before,
+#header-section .logo::before,
+#header-section h1::before,
+#header-section h2::before,
+#header-section > a:first-child::before {
+  content: "";
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--kunyit);
+  box-shadow: 9px 9px 0 -2px var(--hutan);
+  margin-right: 9px;
+}
+
+/* navigasi */
+#header-section nav { display: block; }
+#header-section nav ul,
+#header-section ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#header-section nav a,
+#header-section ul a,
+#header-section nav > a {
+  position: relative;
+  display: inline-block;
+  padding: 0.5rem 1.05rem;
+  border-radius: var(--radius-tombol);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.97rem;
+  color: var(--tinta);
+  transition: background 0.2s, color 0.2s;
+}
+
+
+/* =========================================================
+   UI/UX DESIGNER A - HERO SECTION
+   Satu hal yang dibuat paling berani: HEADLINE.
+   Urutan tampil: eyebrow > judul > deskripsi > tombol > keunggulan
+   (urutan di HTML berbeda, diatur lewat flex "order").
+   ========================================================= */
+#hero-section {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 680px;
+  padding-block: 4.5rem 3.5rem;
+  color: var(--putih);
+  background-color: var(--hutan);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400' fill='none' stroke='%23ffffff' stroke-opacity='.09' stroke-width='1.5'%3E%3Cpath d='M-20 320c90-60 150 20 240-30s120-120 220-90 120 60 180 20'/%3E%3Cpath d='M-20 280c90-60 150 20 240-30s120-120 220-90 120 60 180 20'/%3E%3Cpath d='M-20 240c90-60 150 20 240-30s120-120 220-90 120 60 180 20'/%3E%3Cpath d='M-20 200c90-60 150 20 240-30s120-120 220-90 120 60 180 20'/%3E%3Cpath d='M-20 160c90-60 150 20 240-30s120-120 220-90 120 60 180 20'/%3E%3Cpath d='M-20 120c90-60 150 20 240-30s120-120 220-90 120 60 180 20'/%3E%3C/svg%3E"),
+    linear-gradient(135deg, var(--hutan-tua) 0%, var(--hutan) 62%, var(--langit) 100%);
+  background-size: 600px 400px, cover;
+}
+
+/* ilustrasi gunung, pohon, matahari & jejak langkah (kanan) */
+#hero-section::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-700 0 1400 460' preserveAspectRatio='xMaxYMax slice'%3E%0A%3Ccircle cx='520' cy='130' r='62' fill='%23f4b63f'/%3E%0A%3Ccircle cx='520' cy='130' r='92' fill='%23f4b63f' opacity='.18'/%3E%0A%3Cpath d='M40 460 L120 200 L210 290 L330 150 L470 300 L560 230 L700 340 V460 H40Z' fill='%230a3f37' opacity='.55'/%3E%0A%3Cpath d='M-700 370 L0 380 C100 310 200 350 300 320 S520 270 700 340 V460 H-700Z' fill='%231d7a62'/%3E%0A%3Cpath d='M-700 410 L0 420 C150 370 260 410 380 385 S600 350 700 390 V460 H-700Z' fill='%23e3f0ea' opacity='.95'/%3E%0A%3Cg fill='%230a3f37'%3E%3Crect x='96' y='330' width='6' height='40'/%3E%3Cpath d='M99 300 L74 345 H124Z'/%3E%3Cpath d='M99 322 L70 368 H128Z'/%3E%0A%3Crect x='560' y='318' width='6' height='36'/%3E%3Cpath d='M563 290 L542 330 H584Z'/%3E%3Cpath d='M563 308 L538 350 H588Z'/%3E%3C/g%3E%0A%3Cpath d='M70 445 C170 400 230 440 330 415 S520 385 640 410' fill='none' stroke='%23f4b63f' stroke-width='5' stroke-linecap='round' stroke-dasharray='1 16'/%3E%0A%3C/svg%3E") right bottom / auto 100% no-repeat;
+  pointer-events: none;
+}
+/* lapisan gelap tipis di kiri supaya teks selalu terbaca */
+#hero-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(10, 63, 55, 0.7) 0%, rgba(10, 63, 55, 0.35) 48%, transparent 75%);
+  pointer-events: none;
+}
+#hero-section > * { position: relative; z-index: 1; }
+
+/* eyebrow (paragraf pertama): label kecil dengan titik jejak */
+#hero-section > p:first-child {
+  order: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin: 0 0 1.6rem;
+  padding: 0.5rem 1.2rem 0.5rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--putih);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: var(--radius-tombol);
+  backdrop-filter: blur(4px);
+}
+#hero-section > p:first-child::before {
+  content: "";
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--kunyit);
+  box-shadow: 0 0 0 4px rgba(244, 182, 63, 0.3);
+}
+
+/* HEADLINE: besar, rapat, sedikit lebih sempit (font-stretch),
+   ditutup dengan jejak titik yang "berjalan" menuju tombol */
+#hero-section h1 {
+  order: 2;
+  max-width: 7.4em;
+  margin: 0 0 0.5em;
+  font-size: clamp(2.7rem, 6.2vw, 5rem);
+  font-weight: 800;
+  font-stretch: 86%;
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+  text-shadow: 0 6px 30px rgba(0, 0, 0, 0.22);
+}
+#hero-section h1::after {
+  content: "";
+  display: block;
+  width: 168px;
+  height: 8px;
+  margin-top: 1.4rem;
+  background: var(--jejak) 0 0 / 24px 8px repeat-x;
+}
+
+/* deskripsi */
+#hero-section > p:nth-of-type(2) {
+  order: 3;
+  max-width: 46ch;
+  margin-bottom: 1.8rem;
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* tombol CTA berada tepat setelah deskripsi */
+#hero-section .button { order: 4; }
+
+/* tiga keunggulan: strip kartu putih di dasar hero */
+#hero-section ul {
+  order: 5;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  width: 100%;
+  max-width: 1120px;
+  list-style: none;
+  padding: 0;
+  margin: 3.5rem 0 0;
+}
+#hero-section ul li {
+  position: relative;
+  padding: 1.1rem 1.2rem 1.1rem 3.6rem;
+  font-size: 0.97rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--tinta);
+  background: var(--putih);
+  border-radius: 16px;
+  box-shadow: 0 12px 28px rgba(5, 30, 26, 0.28);
+}
+#hero-section ul li::before {
+  content: "\2713";
+  position: absolute;
+  left: 1.1rem;
+  top: 1.05rem;
+  display: grid;
+  place-items: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--putih);
+  background: var(--hutan);
+  border-radius: 50%;
+}
+
+/* satu momen gerak saat halaman dibuka: isi hero muncul berurutan */
+@keyframes hero-muncul {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: none; }
+}
+#hero-section > * { animation: hero-muncul 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+#hero-section > p:first-child        { animation-delay: 0.05s; }
+#hero-section h1                     { animation-delay: 0.15s; }
+#hero-section > p:nth-of-type(2)     { animation-delay: 0.28s; }
+#hero-section .button                { animation-delay: 0.38s; }
+#hero-section ul                     { animation-delay: 0.5s; }
+
+
+/* =========================================================
+   UI/UX DESIGNER A - CATALOG LAYOUT
+   ========================================================= */
+#catalog-section { background: var(--putih); }
+
+/* banner kode promo */
+#catalog-section > p.promo {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  margin: 1.5rem auto 3.25rem;
+  padding: 0.75rem 1.4rem;
+  text-align: center;
+  font-size: 0.97rem;
+  font-weight: 500;
+  color: #6b4a00;
+  background: #fff8e6;
+  border: 1.5px dashed var(--kunyit-tua);
+  border-radius: 14px;
+}
+#catalog-section > p.promo strong {
+  padding: 0.1rem 0.6rem;
+  letter-spacing: 0.08em;
+  color: var(--tinta);
+  background: var(--kunyit);
+  border-radius: 8px;
+}
+
+/* grid tiga kartu */
+.catalog {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.75rem;
+  align-items: stretch;
+}
+
+
+/* =========================================================
+   UI/UX DESIGNER A - RESPONSIVE DESIGN
+   desktop > 1024px | tablet <= 1024px & <= 900px | ponsel <= 600px
+   ========================================================= */
+@media (max-width: 1024px) {
+  #hero-section { min-height: 0; padding-block: 4.5rem 3.5rem; }
+  #hero-section::after { opacity: 0.7; }
+}
+
+@media (max-width: 900px) {
+  #catalog-section, #calc-section { padding-block: 4rem; }
+  .catalog { grid-template-columns: repeat(2, 1fr); }
+  /* kartu ketiga tidak menggantung sendirian */
+  .catalog > article:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: calc(50% - 0.875rem);
+  }
+  #hero-section::after { opacity: 0.55; }
+  #hero-section h1 { max-width: 8em; }
+}
+
+@media (max-width: 760px) {
+  #hero-section ul { grid-template-columns: 1fr; margin-top: 2.5rem; }
+}
+
+@media (max-width: 600px) {
+  /* kartu menumpuk ke bawah */
+  .catalog { grid-template-columns: 1fr; }
+  .catalog > article:last-child:nth-child(odd) { width: 100%; }
+
+  #header-section,
+  #header-section > div,
+  #header-section .container,
+  #header-section .header-inner {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  #header-section { padding-block: 0.7rem; }
+  #header-section ul { justify-content: center; }
+  #header-section nav a, #header-section ul a { padding: 0.4rem 0.8rem; font-size: 0.92rem; }
+
+  #hero-section { padding-block: 3rem 3rem; }
+  #hero-section h1 { max-width: none; font-size: clamp(2.5rem, 12.5vw, 3.4rem); }
+  #hero-section h1::after { width: 120px; background-size: 20px 8px; }
+  #hero-section::after { height: 38%; opacity: 0.6; }
+  #hero-section::before { background: linear-gradient(180deg, rgba(10, 63, 55, 0.55), rgba(10, 63, 55, 0.25)); }
+  #hero-section .button { display: block; width: 100%; }
+
+  #calc-section form,
+  #calc-section .calc-box { padding: 1.5rem; }
+}
+
+
+/* =========================================================
+   UI/UX DESIGNER B - PRODUCT CARDS
+   Urutan visual: gambar > badge harga > nama paket > kategori > deskripsi
+   ========================================================= */
+.catalog > article {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 1.75rem;
+  background: var(--kertas);
+  border: 1px solid var(--garis);
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+
+/* gambar ilustrasi di atas kartu (tiap paket beda warna dasar) */
+.catalog > article::before {
+  content: "";
+  display: block;
+  height: 160px;
+  margin: -1.75rem -1.75rem 2.1rem;
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  border-bottom: 5px solid var(--hutan);
+}
+.catalog > article:nth-of-type(1)::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 150' preserveAspectRatio='xMidYMax slice'%3E%0A%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23bfe3ee'/%3E%3Cstop offset='1' stop-color='%23fbe9c3'/%3E%3C/linearGradient%3E%3C/defs%3E%0A%3Crect width='400' height='150' fill='url(%23g)'/%3E%3Ccircle cx='320' cy='45' r='20' fill='%23f4b63f'/%3E%0A%3Cg fill='%230f5b4f'%3E%3Crect x='20' y='80' width='40' height='70'/%3E%3Crect x='66' y='50' width='34' height='100'/%3E%3Crect x='106' y='90' width='50' height='60'/%3E%0A%3Crect x='162' y='60' width='30' height='90'/%3E%3Cpath d='M200 150 V95 Q230 40 260 95 V150Z'/%3E%3Crect x='268' y='75' width='44' height='75'/%3E%3Crect x='318' y='100' width='62' height='50'/%3E%3C/g%3E%0A%3Cg fill='%23fbe9c3'%3E%3Crect x='30' y='95' width='8' height='8'/%3E%3Crect x='44' y='95' width='8' height='8'/%3E%3Crect x='74' y='65' width='8' height='8'/%3E%3Crect x='74' y='85' width='8' height='8'/%3E%3Crect x='170' y='75' width='7' height='7'/%3E%3Crect x='278' y='92' width='8' height='8'/%3E%3Crect x='292' y='92' width='8' height='8'/%3E%3C/g%3E%0A%3C/svg%3E"); }
+.catalog > article:nth-of-type(2)::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 150' preserveAspectRatio='xMidYMax slice'%3E%0A%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23cfeedd'/%3E%3Cstop offset='1' stop-color='%23f3fbe3'/%3E%3C/linearGradient%3E%3C/defs%3E%0A%3Crect width='400' height='150' fill='url(%23g)'/%3E%3Ccircle cx='85' cy='40' r='18' fill='%23f4b63f'/%3E%0A%3Cpath d='M0 110 L90 50 L170 105 L260 35 L400 120 V150 H0Z' fill='%237fb8a4'/%3E%0A%3Cpath d='M0 130 C80 100 160 140 240 115 S350 100 400 125 V150 H0Z' fill='%231d7a62'/%3E%0A%3Cg fill='%230a3f37'%3E%3Crect x='60' y='108' width='5' height='32'/%3E%3Cpath d='M62 80 L44 118 H80Z'/%3E%3Cpath d='M62 95 L40 132 H84Z'/%3E%0A%3Crect x='300' y='100' width='5' height='40'/%3E%3Cpath d='M302 68 L282 108 H322Z'/%3E%3Cpath d='M302 86 L278 128 H326Z'/%3E%0A%3Crect x='200' y='112' width='4' height='28'/%3E%3Cpath d='M202 92 L188 120 H216Z'/%3E%3C/g%3E%0A%3C/svg%3E"); border-bottom-color: var(--langit); }
+.catalog > article:nth-of-type(3)::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 150' preserveAspectRatio='xMidYMax slice'%3E%0A%3Crect width='400' height='150' fill='%23fdecc8'/%3E%0A%3Cg fill='none' stroke='%23dc9d24' stroke-width='4' stroke-linecap='round' opacity='.7'%3E%3Cpath d='M165 52 C150 38 180 28 165 12'/%3E%3Cpath d='M200 55 C185 41 215 31 200 15'/%3E%3Cpath d='M235 52 C220 38 250 28 235 12'/%3E%3C/g%3E%0A%3Cpath d='M110 75 H290 C290 125 255 145 200 145 S110 125 110 75Z' fill='%230f5b4f'/%3E%0A%3Cellipse cx='200' cy='75' rx='90' ry='14' fill='%231d7a62'/%3E%0A%3Cellipse cx='200' cy='73' rx='78' ry='9' fill='%23f4b63f'/%3E%0A%3Ccircle cx='170' cy='72' r='6' fill='%23dc9d24'/%3E%3Ccircle cx='205' cy='70' r='5' fill='%23e3f0ea'/%3E%3Ccircle cx='232' cy='73' r='6' fill='%230a3f37'/%3E%0A%3Crect x='270' y='20' width='5' height='100' rx='2' fill='%230a3f37' transform='rotate(20 272 70)'/%3E%3Crect x='288' y='20' width='5' height='100' rx='2' fill='%230a3f37' transform='rotate(20 290 70)'/%3E%0A%3C/svg%3E"); border-bottom-color: var(--kunyit); }
+
+/* harga: badge kuning di tepi bawah gambar (elemen paling menonjol) */
+.catalog > article strong {
+  position: absolute;
+  top: 160px;
+  left: 1.75rem;
+  transform: translateY(-50%);
+  max-width: calc(100% - 3.5rem);
+  padding: 0.5rem 1.1rem;
+  font-family: var(--font-judul);
+  font-size: 1.2rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--tinta);
+  background: var(--kunyit);
+  border-radius: var(--radius-tombol);
+  box-shadow: 0 8px 20px rgba(10, 63, 55, 0.28);
+}
+
+/* nama paket */
+.catalog > article h3 {
+  margin-bottom: 0.45rem;
+  font-size: 1.7rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--hutan);
+}
+
+/* kategori (paragraf pertama): label kecil, huruf biasa */
+.catalog > article p:first-of-type {
+  align-self: flex-start;
+  margin: 0 0 1rem;
+  padding: 0.28rem 0.85rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--hutan);
+  background: var(--hutan-muda);
+  border-radius: var(--radius-tombol);
+}
+
+/* deskripsi */
+.catalog > article p:last-of-type {
+  flex-grow: 1;
+  margin-bottom: 0;
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: var(--abu);
+}
+
+
+/* =========================================================
+   UI/UX DESIGNER B - CALCULATOR FORM
+   ids dari script.js: #paket #jumlah #kode-promo #btn-hitung #hasil
+   ========================================================= */
+#calc-section { background: var(--hutan-muda); }
+
+#calc-section > * {
+  max-width: 560px;
+  margin-inline: auto;
+}
+#calc-section > p { text-align: center; color: var(--abu); }
+#calc-section > h2 + p,
+#calc-section > h2 { margin-bottom: 1.2rem; }
+
+/* kartu formulir */
+#calc-section form,
+#calc-section .calc-box,
+#calc-section .calculator,
+#calc-section .calc-form {
+  padding: 2.25rem;
+  background: var(--putih);
+  border: 1px solid var(--garis);
+}
+
+#calc-section label {
+  display: block;
+  margin: 1.1rem 0 0.4rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--tinta);
+}
+#calc-section label:first-child { margin-top: 0; }
+
+#paket, #jumlah, #kode-promo {
+  display: block;
+  width: 100%;
+  padding: 0.85rem 1rem;
+  font-family: var(--font-isi);
+  font-size: 1rem;
+  color: var(--tinta);
+  background: var(--kertas);
+  border: 1.5px solid var(--garis);
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+/* dropdown dengan panah kustom */
+#paket {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 2.8rem;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9' fill='none' stroke='%230f5b4f' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1.1rem center;
+}
+
+/* kolom kode promo bergaya kupon */
+#kode-promo {
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: #fff8e6;
+  border: 1.5px dashed var(--kunyit-tua);
+}
+#kode-promo::placeholder {
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: #7d6d48;
+}
+
+/* focus state */
+#paket:focus, #jumlah:focus, #kode-promo:focus {
+  outline: none;
+  background-color: var(--putih);
+  border-color: var(--hutan);
+  box-shadow: 0 0 0 4px rgba(15, 91, 79, 0.18);
+}
+
+/* tombol hitung */
+#btn-hitung {
+  display: block;
+  width: 100%;
+  margin-top: 1.6rem;
+  padding: 1rem 1.8rem;
+  font-size: 1.05rem;
+  background: var(--kunyit);
+  color: var(--tinta);
+}
+
+/* kotak hasil: judul kecil > rincian > info promo > TOTAL (paling besar) */
+#hasil {
+  margin-top: 1.5rem;
+  padding: 1.5rem 1.75rem 0;
+  overflow: hidden;
+  background: var(--putih);
+  border: 1px solid var(--garis);
+  border-left: 6px solid var(--kunyit);
+}
+#hasil:empty { display: none; }
+
+#hasil h3 {
+  margin-bottom: 0.8rem;
+  font-family: var(--font-isi);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--hutan);
+}
+#hasil p {
+  margin: 0 0 0.45rem;
+  max-width: none;
+  font-size: 0.97rem;
+  color: var(--abu);
+}
+#hasil p.promo-info {
+  display: inline-block;
+  margin: 0.4rem 0 1.2rem;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #6b4a00;
+  background: #fff8e6;
+  border-radius: 10px;
+}
+#hasil p.total {
+  margin: 0 -1.75rem;
+  padding: 1.1rem 1.75rem;
+  color: var(--putih);
+  background: var(--hutan);
+}
+#hasil p.total strong {
+  font-family: var(--font-judul);
+  font-size: clamp(1.45rem, 4.2vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+#hasil p.error {
+  margin: 0 0 1.5rem;
+  font-weight: 700;
+  color: var(--error);
+}
+
+
+/* =========================================================
+   UI/UX DESIGNER A - FOOTER (mengikuti identitas warna)
+   ========================================================= */
+#footer-section {
+  padding: 2.5rem var(--gutter);
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.88);
+  background: var(--hutan-tua);
+}
+#footer-section p { margin: 0 0 0.4rem; max-width: none; }
+#footer-section ul { list-style: none; margin: 0; padding: 0; }
+#footer-section a { color: var(--kunyit); }
+#footer-section > div,
+#footer-section .container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+}
+@media (max-width: 600px) {
+  #footer-section > div, #footer-section .container { flex-direction: column; }
+}
+
+
+/* =========================================================
+   UI/UX DESIGNER B - BORDER RADIUS & BOX SHADOW
+   satu standar untuk kartu, form, input, tombol, hasil
+   ========================================================= */
+.catalog > article {
+  border-radius: var(--radius-kartu);
+  box-shadow: var(--bayangan);
+}
+#calc-section form,
+#calc-section .calc-box,
+#calc-section .calculator,
+#calc-section .calc-form {
+  border-radius: 24px;
+  box-shadow: var(--bayangan);
+}
+#paket, #jumlah, #kode-promo {
+  border-radius: var(--radius-input);
+  box-shadow: 0 2px 6px rgba(15, 91, 79, 0.06);
+}
+#hasil {
+  border-radius: var(--radius-input);
+  box-shadow: var(--bayangan);
+}
+.button, button {
+  border-radius: var(--radius-tombol);
+  box-shadow: 0 6px 16px rgba(10, 63, 55, 0.18);
+}
+
+
+/* =========================================================
+   UI/UX DESIGNER B - HOVER EFFECT
+   (hover, active, focus-visible; transisi halus)
+   ========================================================= */
+.button, button {
+  display: inline-block;
+  font-family: var(--font-isi);
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 0.95rem 2rem;
+  color: var(--tinta);
+  background: var(--kunyit);
+  border: 2px solid transparent;
+  transition: background 0.25s, color 0.25s, transform 0.25s, box-shadow 0.25s;
+}
+#hero-section .button {
+  padding: 1.05rem 2.2rem;
+  font-size: 1.08rem;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.28);
+}
+
+.button:hover, button:hover {
+  color: var(--putih);
+  background: var(--hutan-tua);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 26px rgba(10, 63, 55, 0.35);
+}
+/* di hero (latar hijau): hover jadi putih agar tetap terbaca */
+#hero-section .button:hover {
+  color: var(--hutan-tua);
+  background: var(--putih);
+}
+
+.button:active, button:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 3px 8px rgba(10, 63, 55, 0.25);
+}
+
+.button:focus-visible, button:focus-visible,
+#header-section a:focus-visible {
+  outline: 3px solid var(--hutan);
+  outline-offset: 3px;
+}
+#hero-section .button:focus-visible { outline-color: var(--putih); }
+
+/* hover kartu */
+.catalog > article:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--bayangan-hover);
+}
+
+/* hover navigasi header */
+#header-section nav a:hover,
+#header-section ul a:hover {
+  color: var(--hutan);
+  background: var(--hutan-muda);
+}
+
+/* hover kolom formulir */
+#paket:hover, #jumlah:hover { border-color: var(--hutan); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+  .catalog > article:hover, .button:hover, button:hover { transform: none; }
+}
